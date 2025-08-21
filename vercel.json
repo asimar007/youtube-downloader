@@ -4,5 +4,5 @@
       "YOUTUBE_DL_SKIP_DOWNLOAD": "true"
     }
   },
-  "installCommand": "pip install yt-dlp && npm install"
+  "installCommand": "python3 -m pip install yt-dlp && npm install"
 }
