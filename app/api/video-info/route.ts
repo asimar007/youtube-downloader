@@ -1,7 +1,9 @@
 // app/api/video-info/route.ts
 
 import { NextResponse } from "next/server";
-import youtubedl from "youtube-dl-exec";
+import { create as createYoutubedl } from "youtube-dl-exec";
+
+const youtubedl = createYoutubedl("/usr/local/bin/yt-dlp");
 
 interface Format {
   format_id: string;

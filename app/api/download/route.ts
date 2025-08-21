@@ -1,7 +1,9 @@
 // app/api/download/route.ts
 
 import { NextRequest } from "next/server";
-import youtubedl from "youtube-dl-exec";
+import { create as createYoutubedl } from "youtube-dl-exec";
+
+const youtubedl = createYoutubedl("/usr/local/bin/yt-dlp");
 
 export async function GET(request: NextRequest) {
   try {
