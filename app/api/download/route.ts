@@ -1,7 +1,7 @@
 // app/api/download/route.ts
 
 import { NextRequest } from "next/server";
-import { ytDlp } from "yt-dlp-exec";
+import youtubedl from "youtube-dl-exec";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,12 +22,11 @@ export async function GET(request: NextRequest) {
     // This is the key part for server deployment.
     // yt-dlp will automatically find the best audio ('ba') to merge with the selected video format.
     // The output is piped to stdout ('-o', '-') which we can then stream.
-    const downloadStream = ytDlp.exec(url, {
+    const downloadStream = youtubedl.exec(url, {
       format: `${formatId}+ba`, // Download specified video format and best audio
       output: "-", // Pipe output to stdout
       noWarnings: true,
-      noCallHome: true,
-      noCheckCertificate: true,
+      noCheckCertificates: true,
       preferFreeFormats: true,
       youtubeSkipDashManifest: true,
       // IMPORTANT: Point to the ffmpeg binary included by yt-dlp-exec's dependencies.

@@ -1,7 +1,7 @@
 // app/api/video-info/route.ts
 
 import { NextResponse } from "next/server";
-import ytDlp from "yt-dlp-exec";
+import youtubedl from "youtube-dl-exec";
 
 interface Format {
   format_id: string;
@@ -30,15 +30,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    // Use yt-dlp-exec to get video information in JSON format
-    const videoInfo: VideoInfo = await ytDlp(url, {
+    // Use youtube-dl-exec to get video information in JSON format
+    const videoInfo: VideoInfo = (await youtubedl(url, {
       dumpSingleJson: true, // Get all info in a single JSON object
       noWarnings: true,
-      noCallHome: true,
-      noCheckCertificate: true,
+      noCheckCertificates: true,
       preferFreeFormats: true,
       youtubeSkipDashManifest: true,
-    });
+    })) as VideoInfo;
+
+    if (typeof videoInfo === "string" || !videoInfo || !videoInfo.formats) {
+      throw new Error(
+        "Failed to parse video information. Ensure the URL is valid and publicly accessible."
+      );
+    }
 
     // We only want to show formats that have both video and audio,
     // or are high-quality video-only streams that yt-dlp can merge with the best audio.
